@@ -1,14 +1,19 @@
 const { PrismaClient } = require('@prisma/client')
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 const prisma = new PrismaClient()
 
 /////CREATE NEW USER
 const createUser = async(body) => {
     console.log(body);
+    const hashPassword = await bcrypt.hash(body.password,3);
     try {
         const newUser = await prisma.user.create({
-            data:body   
+            data:{
+                username:body.username,
+                password:hashPassword
+            }  
         });
         return newUser;
     } catch (error) {

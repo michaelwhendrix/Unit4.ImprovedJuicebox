@@ -52,7 +52,7 @@ app.post('/posts', async(req, res) => {
     }
 });
 
-/////GET POSTS BY USER ID
+/////GET ALL POSTS BY USER ID EMBEDDED IN TOKEN
 app.get('/posts/me', async(req, res) => {
     console.log(req.headers);
     const token = req.headers.authorization.slice(7);
