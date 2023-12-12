@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "seed:dev": "node db/seed.cjs",
     "start:dev": "nodemon server.cjs",
     "dev": "vite",
     "build": "vite build",
