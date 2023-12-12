@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client')
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const prisma = new PrismaClient()
 
+/////CREATE NEW USER
 const createUser = async(body) => {
     console.log(body);
     try {
@@ -13,12 +15,16 @@ const createUser = async(body) => {
        console.log(error); 
     }
 }
-
+/////GET ALL USERS
 const getUsers = async() => {
-    const allUsers = await prisma.user.findMany();
-    return allUsers;
+    try {
+        const allUsers = await prisma.user.findMany();
+        return allUsers;      
+    } catch (error) {
+        console.log(error);
+    }
 }
-
+////USER LOGIN
 const getUserByNamePass = async(body) => {
     try {
         const oneUser = await prisma.user.findUnique({
@@ -26,7 +32,7 @@ const getUserByNamePass = async(body) => {
         });
 
         if(oneUser) {
-            const userToken = jwt.sign({id:oneUser.id},'secretword');
+            const userToken = jwt.sign({id:oneUser.id},process.env.SECRET);
             return userToken;
         }
         else{

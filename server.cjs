@@ -5,6 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const {getUsers, createUser, getUserByNamePass} = require('./db/user.cjs');
+const {createPost, getAllPosts, getPostsByUserId} = require('./db/post.cjs');
 
 app.use(express.json());
 app.use('/assets', express.static(__dirname + '/dist/assets'));
@@ -12,13 +13,17 @@ app.use('/assets', express.static(__dirname + '/dist/assets'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/dist/index.html')
 });
-
+/////GET ALL USERS
 app.get('/users', async(req, res) => {
-    const allUsers = await getUsers();
-    res.send(allUsers);
+    try {
+        const allUsers = await getUsers();
+        res.send(allUsers);      
+    } catch (error) {
+        console.log(error);
+    }
 });
-
-app.get('/users/me', async(req, res) => {
+//////LOGIN USER RETURN TOKEN
+app.get('/users/login', async(req, res) => {
     try {
         const thisUser = await getUserByNamePass(req.body);
         res.send(thisUser);       
@@ -26,7 +31,7 @@ app.get('/users/me', async(req, res) => {
         console.log(error);
     }
 });
-
+/////CREATE USER
 app.post('/users',async(req, res) => {
     try {
         console.log(req.body);
@@ -34,8 +39,40 @@ app.post('/users',async(req, res) => {
         res.send(newUser);
     } catch (error) {
         console.log(error);
-    }
-    
+    }   
 });
+
+/////CREATE POST
+app.post('/posts', async(req, res) => {
+    try {
+        const newPost = await createPost(req.body);
+        res.send(newPost);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+/////GET POSTS BY USER ID
+app.get('/posts/me', async(req, res) => {
+    console.log(req.headers);
+    const token = req.headers.authorization.slice(7);
+    try {
+        const allUserPosts = await getPostsByUserId(token);
+        res.send(allUserPosts);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+/////GET ALL POSTS
+app.get('/posts', async(req, res) => {
+    try {
+        const allPosts = await getAllPosts();
+        res.send(allPosts);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 
 app.listen(PORT, () => {console.log(`Listneing on port ${PORT}`)});
