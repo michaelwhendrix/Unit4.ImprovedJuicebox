@@ -82,7 +82,7 @@ app.get('/posts', async(req, res) => {
     }
 });
 
-//////DELETE POST BY USER
+//////DELETE POST BY USER ID EMBEDDED IN TOKEN
 app.post('/posts/delete', async(req, res) => {
     try {
         const token = req.headers.authorization.slice(7);
