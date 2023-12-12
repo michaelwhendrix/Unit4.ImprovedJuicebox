@@ -24,7 +24,15 @@ const getUserByNamePass = async(body) => {
         const oneUser = await prisma.user.findUnique({
             where: body
         });
-        return oneUser;
+
+        if(oneUser) {
+            const userToken = jwt.sign({id:oneUser.id},'secretword');
+            return userToken;
+        }
+        else{
+            const error = {'status-401':'bad credentials'};
+            return error;
+        }
       
     } catch (error) {
         console.log(error);
