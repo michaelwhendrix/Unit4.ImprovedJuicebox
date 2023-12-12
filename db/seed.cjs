@@ -1,21 +1,26 @@
 const { PrismaClient } = require('@prisma/client')
+const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient()
+
+const toHashPassword = async(password) => {
+  return await bcrypt.hash(password,3);
+}
 
 const main = async() => {
     await prisma.user.createMany({
         data: [
             {
             username:   'Moe',
-            password:   'Moe',
+            password:   await toHashPassword('Moe'),
             },
             {
             username:   'Larry',
-            password:   'Larry',
+            password:   await toHashPassword('Larry'),
             },
             {
             username:   'Curley',
-            password:   'Curley',
+            password:   await toHashPassword('Curley'),
             },
     ]
     });
