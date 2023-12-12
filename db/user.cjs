@@ -1,14 +1,14 @@
 const { PrismaClient } = require('@prisma/client')
-
+const jwt = require('jsonwebtoken');
 const prisma = new PrismaClient()
 
 const createUser = async(body) => {
     console.log(body);
     try {
-        const oneUser = await prisma.user.create({
+        const newUser = await prisma.user.create({
             data:body   
         });
-        return oneUser;
+        return newUser;
     } catch (error) {
        console.log(error); 
     }
@@ -19,12 +19,15 @@ const getUsers = async() => {
     return allUsers;
 }
 
-const getUserByName = async(name) => {
-    const oneUser = await prisma.user.findUnique({
-        where: {
-            username: name
-        }
-    });
-    return oneUser;
+const getUserByNamePass = async(body) => {
+    try {
+        const oneUser = await prisma.user.findUnique({
+            where: body
+        });
+        return oneUser;
+      
+    } catch (error) {
+        console.log(error);
+    }
 }
-module.exports = { createUser,getUsers,getUserByName };
+module.exports = { createUser,getUsers,getUserByNamePass };

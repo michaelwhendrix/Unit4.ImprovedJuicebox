@@ -4,7 +4,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const {getUsers, createUser} = require('./db/user.cjs');
+const {getUsers, createUser, getUserByNamePass} = require('./db/user.cjs');
 
 app.use(express.json());
 app.use('/assets', express.static(__dirname + '/dist/assets'));
@@ -16,6 +16,15 @@ app.get('/', (req, res) => {
 app.get('/users', async(req, res) => {
     const allUsers = await getUsers();
     res.send(allUsers);
+});
+
+app.get('/users/me', async(req, res) => {
+    try {
+        const thisUser = await getUserByNamePass(req.body);
+        res.send(thisUser);       
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.post('/users',async(req, res) => {
