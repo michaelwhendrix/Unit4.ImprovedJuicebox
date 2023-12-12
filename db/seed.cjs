@@ -19,6 +19,28 @@ const main = async() => {
             },
     ]
     });
+
+
+    await prisma.post.createMany({
+      data: [
+          {
+          title:   'Wise Guy, Eh?',
+          content:   'This is not an abusive relationship.',
+          authorId:   1,
+          },
+          {
+          title:   'Personal Thoughts',
+          content:   'I really like these guys... but',
+          authorId:   2,
+          },
+          {
+          title:   'I Am Hungry!',
+          content:   'Nothing like a pastrami on rye sub.',
+          authorId:   3,
+          },
+  ]
+  });
+  
     console.log('SEEDED');
 }
 
