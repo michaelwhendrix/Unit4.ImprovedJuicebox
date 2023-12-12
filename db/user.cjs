@@ -57,4 +57,16 @@ const getUserByNamePass = async(body) => {
         console.log(error);
     }
 }
-module.exports = { createUser,getUsers,getUserByNamePass };
+
+//////DELETE USER
+const deleteUser = async(body) =>{
+    try {
+        const deletedUser = await prisma.user.delete({
+            where:body
+        });
+        return deletedUser;
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = { createUser,getUsers,getUserByNamePass,deleteUser};

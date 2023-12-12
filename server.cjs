@@ -4,8 +4,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const {getUsers, createUser, getUserByNamePass} = require('./db/user.cjs');
-const {createPost, getAllPosts, getPostsByUserId} = require('./db/post.cjs');
+const {getUsers, createUser, getUserByNamePass, deleteUser} = require('./db/user.cjs');
+const {createPost, getAllPosts, getPostsByUserId, deletePostByUser} = require('./db/post.cjs');
 
 app.use(express.json());
 app.use('/assets', express.static(__dirname + '/dist/assets'));
@@ -34,13 +34,21 @@ app.get('/users/login', async(req, res) => {
 /////CREATE USER
 app.post('/users',async(req, res) => {
     try {
-        console.log(req.body);
         const newUser = await createUser(req.body);
         res.send(newUser);
     } catch (error) {
         console.log(error);
     }   
 });
+
+app.post('/users/delete', async(req, res) =>{
+    try {
+        const deletedUser = await deleteUser(req.body);
+        res.send(deletedUser);
+    } catch (error) {
+        
+    }
+})
 
 /////CREATE POST
 app.post('/posts', async(req, res) => {
@@ -74,5 +82,15 @@ app.get('/posts', async(req, res) => {
     }
 });
 
+//////DELETE POST BY USER
+app.post('/posts/delete', async(req, res) => {
+    try {
+        const token = req.headers.authorization.slice(7);
+        const allPostsDeletedByUser = await deletePostByUser(token);
+        res.send(allPostsDeletedByUser);
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 app.listen(PORT, () => {console.log(`Listneing on port ${PORT}`)});

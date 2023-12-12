@@ -26,4 +26,18 @@ const getPostsByUserId = async(token) => {
     });
     return allUserPosts;
 }
-module.exports = {createPost, getAllPosts, getPostsByUserId};
+/////DELETE POST
+const deletePostByUser = async(token) => {
+    try {
+        const userId = jwt.verify(token,process.env.SECRET);
+        const deletedPostOfUser = await prisma.post.deleteMany({
+            where: {
+                authorId:userId.id
+            }
+        });
+        return deletedPostOfUser;
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = {createPost, getAllPosts, getPostsByUserId,deletePostByUser};
