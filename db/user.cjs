@@ -1,3 +1,4 @@
+
 const { PrismaClient } = require('@prisma/client')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -33,12 +34,19 @@ const getUsers = async() => {
 const getUserByNamePass = async(body) => {
     try {
         const oneUser = await prisma.user.findUnique({
-            where: body
+            where: {
+                username: body.username
+            }
         });
-
         if(oneUser) {
+            const verifiedPassword = bcrypt.compare(body.password, oneUser.password);
+        
+        
+
+        if(verifiedPassword) {
             const userToken = jwt.sign({id:oneUser.id},process.env.SECRET);
             return userToken;
+        }
         }
         else{
             const error = {'status-401':'bad credentials'};
