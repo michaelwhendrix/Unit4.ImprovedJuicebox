@@ -23,8 +23,9 @@ app.get('/users', async(req, res) => {
     }
 });
 //////LOGIN USER RETURN TOKEN
-app.get('/users/login', async(req, res) => {
+app.post('/users/login', async(req, res) => {
     try {
+        console.log(req.body);
         const thisUser = await getUserByNamePass(req.body);
         res.send(thisUser);       
     } catch (error) {
