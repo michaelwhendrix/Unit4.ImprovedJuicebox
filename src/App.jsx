@@ -1,9 +1,15 @@
 import { useState } from "react";
-import  Login  from "./user";
+import  LoginByUserPass  from "./user";
 
 function App() {
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
+
+const Login =async(e)=> {
+  e.preventDefault();
+  await LoginByUserPass(username, password);
+}
+
   return (
     <>
       <h1>Improved Juicebox</h1>

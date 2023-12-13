@@ -1,13 +1,12 @@
-import axios from "axios"
+import axios from "axios";
 
-const Login = async(e) => {
-    e.preventDefault();
+const LoginByUserPass = async(user, pass) => {
     try {
-        const body = {username:'Moe', password:'Moe'}
+        const body = {username: user, password: pass}
         const response = await axios.post('/users/login', body);
         console.log(response.data);       
     } catch (error) { 
         console.log(error)   
     }
 }
-export default Login;
+export default LoginByUserPass;
